@@ -108,6 +108,8 @@ public class Lexer {
 
     public List<Token> tokenize() {
         while (!isAtEnd()) {
+            skipWhitespace();
+            if (isAtEnd()) break;
             scanToken();
         }
         tokens.add(new Token(EOF, "", line, currentChar()));
@@ -143,7 +145,7 @@ public class Lexer {
             case '-' -> {
                 // Could be subtraction or a negative number
                 if (Character.isDigit(peek())) {
-                    scanNumber(tokenLine, tokenChar);
+                    scanNumber(tokenLine, tokenChar, true);
                 } else {
                     addToken(MINUS, "-", tokenLine, tokenChar);
                 }
@@ -154,13 +156,12 @@ public class Lexer {
             default  -> {
                 if (Character.isDigit(c)) {
                     current--;  // advance() consumed one char
-                    scanNumber(tokenLine, tokenChar);
+                    scanNumber(tokenLine, tokenChar, false);
                 } else if (Character.isLetter(c) || c == '_') {
                     current--;
                     scanIdentifierOrKeyword(tokenLine, tokenChar);
                 } else {
-                    // Unknown character
-                    // TODO
+                    addToken(TokenType.ERROR, String.valueOf(c), tokenLine, tokenChar);
                 }
             }
         }
@@ -184,14 +185,17 @@ public class Lexer {
 
     private void scanWord(int tokenLine, int tokenChar) {
         StringBuilder sb = new StringBuilder("\"");
-        while (!isAtEnd() && !Character.isWhitespace(peek())) {
+        while (!isAtEnd() && !Character.isWhitespace(peek())
+                && peek() != '[' && peek() != ']'
+                && peek() != '(' && peek() != ')') {
             sb.append(advance());
         }
         addToken(WORD, sb.toString(), tokenLine, tokenChar);
     }
 
-    private void scanNumber(int tokenLine, int tokenChar) {
+    private void scanNumber(int tokenLine, int tokenChar, boolean isNegative) {
         StringBuilder sb = new StringBuilder();
+        if (isNegative) sb.append('-');
 
         while (!isAtEnd() && Character.isDigit(peek())) {
             sb.append(advance());
@@ -217,6 +221,21 @@ public class Lexer {
         // Check for known keywords
         TokenType type = KEYWORDS.getOrDefault(text.toUpperCase(), TokenType.IDENTIFIER);
         addToken(type, text, tokenLine, tokenChar);
+    }
+
+    private void skipWhitespace() {
+        while (!isAtEnd()) {
+            char c = peek();
+            if (c == ' ' || c == '\t' || c == '\r') {
+                advance();
+            } else if (c == '\n') {
+                advance();
+                line++;
+                start = current;
+            } else {
+                break;
+            }
+        }
     }
 
     // Helpers -----------------

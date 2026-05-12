@@ -61,5 +61,5 @@ public enum TokenType {
     IDENTIFIER,   // procedure names etc
 
     // Other
-    COMMENT, EOF,
+    COMMENT, ERROR, EOF,
 }
