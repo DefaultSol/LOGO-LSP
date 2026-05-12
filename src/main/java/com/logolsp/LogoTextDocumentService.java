@@ -7,7 +7,11 @@ import org.eclipse.lsp4j.DidSaveTextDocumentParams;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.TextDocumentService;
 
+import java.util.logging.Logger;
+
 public class LogoTextDocumentService implements TextDocumentService {
+
+    private static final Logger LOG = Logger.getLogger(LogoTextDocumentService.class.getName());
 
     private LanguageClient client;
     private final DocumentStore documentStore = new DocumentStore();
@@ -22,6 +26,7 @@ public class LogoTextDocumentService implements TextDocumentService {
         String text = params.getTextDocument().getText();
 
         ParsedDocument doc = documentStore.update(uri, text);
+        LOG.info(doc.symbolTable.toString());
     }
 
     @Override
@@ -36,6 +41,7 @@ public class LogoTextDocumentService implements TextDocumentService {
     @Override
     public void didClose(DidCloseTextDocumentParams params) {
         String uri = params.getTextDocument().getUri();
+        documentStore.remove(uri);
     }
 
     @Override

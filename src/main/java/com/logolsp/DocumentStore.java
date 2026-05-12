@@ -27,4 +27,12 @@ public class DocumentStore {
         documents.put(uri, doc);
         return doc;
     }
+
+    public void remove(String uri) {
+        documents.remove(uri);
+    }
+
+    public boolean contains(String uri) {
+        return documents.containsKey(uri);
+    }
 }
