@@ -4,7 +4,7 @@ package com.logolsp;
 public class SymbolTableBuilder {
 
     private final SymbolTable table = new SymbolTable();
-    private String currentProcedure;
+    private String currentProcedure = null;
 
     public SymbolTable build(AstNode.ProgramNode program) {
         for (AstNode statement : program.statements) {
@@ -60,6 +60,9 @@ public class SymbolTableBuilder {
     }
 
     private void visitProcedureCall(AstNode.ProcedureCallNode call) {
+        table.referenceProcedure(call.nameToken);
+        // Arguments may contain variable references
+        visitChildren(call.arguments);
     }
 
     private void visitMake(AstNode.MakeNode make) {
@@ -68,6 +71,7 @@ public class SymbolTableBuilder {
     }
 
     private void visitVariableRef(AstNode.VariableRefNode ref) {
+        table.referenceVariable(ref.token, currentProcedure);
     }
 
     private void visitFor(AstNode.ForNode forNode) {

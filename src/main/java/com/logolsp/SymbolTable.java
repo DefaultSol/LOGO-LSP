@@ -42,6 +42,21 @@ public class SymbolTable {
         // Strip the quote
         String varName = nameToken.text.substring(1).toLowerCase();
 
-        variableDeclarations.put(varName, nameToken);
+        if (currentProcedure != null) {
+            localVariableDeclarations.put(
+                    currentProcedure.toLowerCase() + "/" + varName, nameToken);
+        } else {
+            variableDeclarations.put(varName, nameToken);
+        }
+    }
+
+    public void referenceProcedure(Token nameToken) {
+        String key = nameToken.text.toLowerCase();
+        procedureReferences.computeIfAbsent(key, k -> new ArrayList<>()).add(nameToken);
+    }
+
+    public void referenceVariable(Token varToken, String currentProcedure) {
+        String varName = varToken.text.substring(1).toLowerCase();
+        variableReferences.computeIfAbsent(varName, k -> new ArrayList<>()).add(varToken);
     }
 }
