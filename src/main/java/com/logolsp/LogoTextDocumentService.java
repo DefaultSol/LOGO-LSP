@@ -10,6 +10,7 @@ import org.eclipse.lsp4j.services.TextDocumentService;
 public class LogoTextDocumentService implements TextDocumentService {
 
     private LanguageClient client;
+    private final DocumentStore documentStore = new DocumentStore();
 
     public void setClient(LanguageClient client) {
         this.client = client;
@@ -19,15 +20,17 @@ public class LogoTextDocumentService implements TextDocumentService {
     public void didOpen(DidOpenTextDocumentParams params) {
         String uri = params.getTextDocument().getUri();
         String text = params.getTextDocument().getText();
-        // parse
+
+        ParsedDocument doc = documentStore.update(uri, text);
     }
 
     @Override
     public void didChange(DidChangeTextDocumentParams params) {
         String uri = params.getTextDocument().getUri();
         // Only one change event with the full file text
-        String text = params.getContentChanges().get(0).getText();
-        // parse
+        String text = params.getContentChanges().getFirst().getText();
+
+        ParsedDocument doc = documentStore.update(uri, text);
     }
 
     @Override
