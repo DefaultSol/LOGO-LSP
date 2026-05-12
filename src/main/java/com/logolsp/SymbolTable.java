@@ -24,6 +24,7 @@ public class SymbolTable {
 
 
     // --- Register ---
+
     public void declareProcedure(Token nameToken, List<Token> params) {
         String key = nameToken.text.toLowerCase();
         procedureDeclarations.put(key, nameToken);
@@ -58,5 +59,27 @@ public class SymbolTable {
     public void referenceVariable(Token varToken, String currentProcedure) {
         String varName = varToken.text.substring(1).toLowerCase();
         variableReferences.computeIfAbsent(varName, k -> new ArrayList<>()).add(varToken);
+    }
+
+    // --- Util ---
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("--- Symbol Table ---\n");
+        sb.append("Procedures:\n");
+        procedureDeclarations.forEach((name, token) ->
+                sb.append("  ").append(name)
+                        .append(" (").append(procedureParamCounts.get(name)).append(" params)")
+                        .append(" at line ").append(token.line).append("\n"));
+        sb.append("Global variables:\n");
+        variableDeclarations.forEach((name, token) ->
+                sb.append("  ").append(name)
+                        .append(" at line ").append(token.line).append("\n"));
+        sb.append("Local variables:\n");
+        localVariableDeclarations.forEach((key, token) ->
+                sb.append("  ").append(key)
+                        .append(" at line ").append(token.line).append("\n"));
+        return sb.toString();
     }
 }

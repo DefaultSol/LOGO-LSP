@@ -75,6 +75,20 @@ public class SymbolTableBuilder {
     }
 
     private void visitFor(AstNode.ForNode forNode) {
+        // FOR loop variable is local to the loop body
+        if (forNode.varToken != null) {
+            table.declareVariable(
+                    new Token(TokenType.WORD,
+                            forNode.varToken.text,
+                            forNode.varToken.line,
+                            forNode.varToken.startChar),
+                            currentProcedure);
+        }
+        visitNode(forNode.start);
+        visitNode(forNode.end);
+        if (forNode.step != null)
+            visitNode(forNode.step);
+        visitChildren(forNode.body);
     }
 
     private void visitChildren(java.util.List<AstNode> nodes) {
