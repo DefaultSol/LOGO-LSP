@@ -1,12 +1,10 @@
 package com.logolsp;
 
-
-import java.util.List;
-
 // Walks the AST, fills SymbolTable
 public class SymbolTableBuilder {
 
     private final SymbolTable table = new SymbolTable();
+    private String currentProcedure;
 
     public SymbolTable build(AstNode.ProgramNode program) {
         for (AstNode statement : program.statements) {
@@ -47,13 +45,26 @@ public class SymbolTableBuilder {
             default -> {}
         }
     }
+
     private void visitProcedure(AstNode.ProcedureDeclarationNode proc) {
+        table.declareProcedure(proc.nameToken, proc.paramTokens);
+
+        // Enter this procedure's scope
+        String previousProcedure = currentProcedure;
+        currentProcedure = proc.nameToken.text;
+
+        visitChildren(proc.body);
+
+        // Restore the previous scope
+        currentProcedure = previousProcedure;
     }
 
     private void visitProcedureCall(AstNode.ProcedureCallNode call) {
     }
 
     private void visitMake(AstNode.MakeNode make) {
+        table.declareVariable(make.nameToken, currentProcedure);
+        visitNode(make.value);
     }
 
     private void visitVariableRef(AstNode.VariableRefNode ref) {
@@ -62,6 +73,9 @@ public class SymbolTableBuilder {
     private void visitFor(AstNode.ForNode forNode) {
     }
 
-    private void visitChildren(List<AstNode> nodes) {
+    private void visitChildren(java.util.List<AstNode> nodes) {
+        for (AstNode node : nodes) {
+            visitNode(node);
+        }
     }
 }
