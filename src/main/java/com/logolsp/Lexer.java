@@ -116,7 +116,7 @@ public class Lexer {
         return tokens;
     }
 
-    // Scanning  -------------
+    // --- Scanning ---
 
     private void scanToken() {
         int tokenLine = line;
@@ -223,22 +223,11 @@ public class Lexer {
         addToken(type, text, tokenLine, tokenChar);
     }
 
-    private void skipWhitespace() {
-        while (!isAtEnd()) {
-            char c = peek();
-            if (c == ' ' || c == '\t' || c == '\r') {
-                advance();
-            } else if (c == '\n') {
-                advance();
-                line++;
-                start = current;
-            } else {
-                break;
-            }
-        }
-    }
+    // --- Helper methods ---
 
-    // Helpers -----------------
+    private void addToken(TokenType type, String text, int line, int startChar) {
+        tokens.add(new Token(type, text, line, startChar));
+    }
 
     // 1 char lookahead
     private char peek() {
@@ -269,7 +258,18 @@ public class Lexer {
         return Character.isLetterOrDigit(c) || c == '_';
     }
 
-    private void addToken(TokenType type, String text, int line, int startChar) {
-        tokens.add(new Token(type, text, line, startChar));
+    private void skipWhitespace() {
+        while (!isAtEnd()) {
+            char c = peek();
+            if (c == ' ' || c == '\t' || c == '\r') {
+                advance();
+            } else if (c == '\n') {
+                advance();
+                line++;
+                start = current;
+            } else {
+                break;
+            }
+        }
     }
 }
