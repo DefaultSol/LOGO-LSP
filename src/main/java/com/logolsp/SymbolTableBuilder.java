@@ -16,33 +16,33 @@ public class SymbolTableBuilder {
     private void visitNode(AstNode node) {
         if (node == null) return;
 
-        switch (node) {
-            case AstNode.ProcedureDeclarationNode proc -> visitProcedure(proc);
-            case AstNode.ProcedureCallNode call -> visitProcedureCall(call);
-            case AstNode.BuiltInCommandNode cmd -> visitChildren(cmd.arguments);
-            case AstNode.MakeNode make -> visitMake(make);
-            case AstNode.VariableRefNode ref -> visitVariableRef(ref);
-            case AstNode.RepeatNode repeat -> {
-                visitNode(repeat.count);
-                visitChildren(repeat.body);
-            }
-            case AstNode.ForNode forNode -> visitFor(forNode);
-            case AstNode.WhileNode whileNode -> {
-                visitNode(whileNode.condition);
-                visitChildren(whileNode.body);
-            }
-            case AstNode.IfNode ifNode -> {
-                visitNode(ifNode.condition);
-                visitChildren(ifNode.thenBlock);
-                visitChildren(ifNode.elseBlock);
-            }
-            case AstNode.OutputNode output -> visitNode(output.value);
-            case AstNode.BinaryOpNode binary -> {
-                visitNode(binary.left);
-                visitNode(binary.right);
-            }
-            // Leaf nodes
-            default -> {}
+        if (node instanceof AstNode.ProcedureDeclarationNode proc) {
+            visitProcedure(proc);
+        } else if (node instanceof AstNode.ProcedureCallNode call) {
+            visitProcedureCall(call);
+        } else if (node instanceof AstNode.BuiltInCommandNode cmd) {
+            visitChildren(cmd.arguments);
+        } else if (node instanceof AstNode.MakeNode make) {
+            visitMake(make);
+        } else if (node instanceof AstNode.VariableRefNode ref) {
+            visitVariableRef(ref);
+        } else if (node instanceof AstNode.RepeatNode repeat) {
+            visitNode(repeat.count);
+            visitChildren(repeat.body);
+        } else if (node instanceof AstNode.ForNode forNode) {
+            visitFor(forNode);
+        } else if (node instanceof AstNode.WhileNode whileNode) {
+            visitNode(whileNode.condition);
+            visitChildren(whileNode.body);
+        } else if (node instanceof AstNode.IfNode ifNode) {
+            visitNode(ifNode.condition);
+            visitChildren(ifNode.thenBlock);
+            visitChildren(ifNode.elseBlock);
+        } else if (node instanceof AstNode.OutputNode output) {
+            visitNode(output.value);
+        } else if (node instanceof AstNode.BinaryOpNode binary) {
+            visitNode(binary.left);
+            visitNode(binary.right);
         }
     }
 

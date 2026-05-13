@@ -35,4 +35,8 @@ public class DocumentStore {
     public boolean contains(String uri) {
         return documents.containsKey(uri);
     }
+
+    public ParsedDocument get(String uri) {
+        return documents.get(uri);
+    }
 }
