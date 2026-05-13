@@ -1,19 +1,11 @@
 package com.logolsp;
 
-import org.eclipse.lsp4j.DidChangeTextDocumentParams;
-import org.eclipse.lsp4j.DidCloseTextDocumentParams;
-import org.eclipse.lsp4j.DidOpenTextDocumentParams;
-import org.eclipse.lsp4j.DidSaveTextDocumentParams;
+import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.TextDocumentService;
 
-import org.eclipse.lsp4j.SemanticTokens;
-import org.eclipse.lsp4j.SemanticTokensParams;
 import java.util.List;
 
-import org.eclipse.lsp4j.DefinitionParams;
-import org.eclipse.lsp4j.Location;
-import org.eclipse.lsp4j.LocationLink;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 
 import java.util.concurrent.CompletableFuture;
@@ -26,6 +18,8 @@ public class LogoTextDocumentService implements TextDocumentService {
     private LanguageClient client;
     private final DocumentStore documentStore = new DocumentStore();
 
+    private final DiagnosticAnalyzer diagnosticAnalyzer = new DiagnosticAnalyzer();
+
     public void setClient(LanguageClient client) {
         this.client = client;
     }
@@ -37,7 +31,7 @@ public class LogoTextDocumentService implements TextDocumentService {
         LOG.info("File opened: " + uri);
 
         ParsedDocument doc = documentStore.update(uri, text);
-        LOG.info(doc.symbolTable.toString());
+        publishDiagnostics(doc);
     }
 
     @Override
@@ -48,12 +42,22 @@ public class LogoTextDocumentService implements TextDocumentService {
         LOG.info("File changed: " + uri);
 
         ParsedDocument doc = documentStore.update(uri, text);
+        publishDiagnostics(doc);
     }
 
     @Override
     public void didClose(DidCloseTextDocumentParams params) {
         String uri = params.getTextDocument().getUri();
         documentStore.remove(uri);
+
+        // Clear diagnostics for closed file
+        if (client != null) {
+            PublishDiagnosticsParams clearParams = new PublishDiagnosticsParams();
+            clearParams.setUri(uri);
+            clearParams.setDiagnostics(List.of());
+            client.publishDiagnostics(clearParams);
+        }
+
         LOG.info("File closed: " + uri);
     }
 
@@ -96,5 +100,20 @@ public class LogoTextDocumentService implements TextDocumentService {
         }
 
         return CompletableFuture.completedFuture(Either.forLeft(List.of(location)));
+    }
+
+    private void publishDiagnostics(ParsedDocument doc) {
+        if (client == null)
+            return;
+
+        List<Diagnostic> diagnostics = diagnosticAnalyzer.analyze(doc);
+
+        PublishDiagnosticsParams params = new PublishDiagnosticsParams();
+        params.setUri(doc.uri);
+        params.setDiagnostics(diagnostics);
+
+        client.publishDiagnostics(params);
+
+        LOG.info("Published " + diagnostics.size() + " diagnostic(s) for " + doc.uri);
     }
 }
