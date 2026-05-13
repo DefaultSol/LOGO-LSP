@@ -1,0 +1,18 @@
+; draws a square with the given side length
+TO drawSquare :size
+  REPEAT 4 [
+    FORWARD :size
+    RIGHT 90
+  ]
+END
+
+; draws a pattern of squares
+TO pattern :n :size
+  REPEAT :n [
+    drawSquare :size
+    RIGHT 360 / :n
+  ]
+END
+
+CLEARSCREEN
+pattern 8 100

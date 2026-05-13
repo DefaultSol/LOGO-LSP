@@ -30,11 +30,15 @@ jar {
     manifest {
         attributes 'Main-Class': 'com.logolsp.Main'
     }
-    // bundle all dependencies into one fat jar
     from {
         configurations.runtimeClasspath.collect {
             it.isDirectory() ? it : zipTree(it)
         }
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    exclude 'META-INF/*.EC'
 }
