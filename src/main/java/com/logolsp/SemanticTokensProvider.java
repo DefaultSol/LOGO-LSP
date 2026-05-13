@@ -72,7 +72,14 @@ public class SemanticTokensProvider {
             if (typeIndex == -1) // doesn't need highlighting
                 continue;
 
-            int modifiers = (token.type == TokenType.IDENTIFIER && declaration) ? MOD_DECLARATION : MOD_NONE;
+            int modifiers;
+            if (token.type == TokenType.IDENTIFIER && declaration) {
+                modifiers = MOD_DECLARATION;
+                declaration = false;
+            }
+            else {
+                modifiers = MOD_NONE;
+            }
 
             int deltaLine = token.line - previousLine;
             int deltaStartChar = (deltaLine == 0) ? token.startChar - previousStartChar : token.startChar;
