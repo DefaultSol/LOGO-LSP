@@ -7,8 +7,7 @@ This project is a Language Server for the **LOGO** programming language, built i
 - Syntax highlighting for the language (semantic tokens)
 - Go‑to‑declaration for procedures and variables
 - Diagnostics: parser errors and selected semantic checks are reported to the client in real time
-
-
+<br></br>
 
 ### Quick start
 
@@ -34,12 +33,11 @@ java -jar build/libs/LOGO-LSP-1.0-SNAPSHOT.jar
 
 The server communicates over stdin/stdout as per the LSP specification. It is intended to be launched and managed by an LSP client.
 
-
 ### Using with an LSP client
-
 You can connect any generic LSP client that supports launching a stdio server. Below are two convenient options.
 
-1) JetBrains IDEs via LSP Support (LSP4IJ)
+<details>
+<summary> 1) JetBrains IDEs via LSP Support (LSP4IJ) </summary>
 - Install the plugin: Settings/Preferences → Plugins → Marketplace → search for "LSP Support" and install.
 - Open Settings/Preferences → Tools → Language Servers.
 - Click "+" to add a server.
@@ -49,16 +47,18 @@ You can connect any generic LSP client that supports launching a stdio server. B
   - Command: `java -jar <absolute-path-to>/build/libs/LOGO-LSP-1.0-SNAPSHOT.jar`
   - Working directory: project root (or leave empty)
 - Apply and restart the server when prompted.
+</details>
 
-2) VS Code (with a lightweight generic runner)
+<details>
+<summary> 2) VS Code (with a lightweight generic runner) </summary>
 - VS Code does not ship a built‑in generic LSP connector, but you can use community extensions that run a stdio server for a given file pattern, or create a minimal client extension using `vscode-languageclient` that launches:
   - Command: `java`
   - Args: `-jar <workspace>/build/libs/LOGO-LSP-1.0-SNAPSHOT.jar`
   - Document selector: `"language": "logo"` (or `"pattern": "**/*.logo"`)
-
-Example LOGO file to try: `src/main/java/com/logolsp/test.logo` (you can copy it into your workspace and edit).
-
-
+</details>
+Example LOGO file to try: `src/main/java/com/logolsp/test.logo`
+<br></br>
+    
 ## Architecture and project layout
 
 The design follows a small, layered structure:
