@@ -1,10 +1,10 @@
-package com.logolsp;
+package com.logolsp.lexer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.logolsp.TokenType.*;
+import static com.logolsp.lexer.TokenType.*;
 
 // Reference used: Crafting Interpreters by Robert Nystrom
 // https://craftinginterpreters.com/scanning.html

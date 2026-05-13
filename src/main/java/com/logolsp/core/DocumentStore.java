@@ -1,4 +1,11 @@
-package com.logolsp;
+package com.logolsp.core;
+
+import com.logolsp.symbols.SymbolTable;
+import com.logolsp.symbols.SymbolTableBuilder;
+import com.logolsp.lexer.Lexer;
+import com.logolsp.lexer.Token;
+import com.logolsp.parser.ParseResult;
+import com.logolsp.parser.Parser;
 
 import java.util.HashMap;
 import java.util.List;

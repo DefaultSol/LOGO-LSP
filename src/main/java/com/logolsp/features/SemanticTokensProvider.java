@@ -1,10 +1,14 @@
-package com.logolsp;
+package com.logolsp.features;
+
+import com.logolsp.core.ParsedDocument;
+import com.logolsp.lexer.Token;
+import com.logolsp.lexer.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static com.logolsp.TokenType.*;
+import static com.logolsp.lexer.TokenType.*;
 
 // Classifies the tokens and encodes them
 // Encoding format: [ deltaLine, deltaStartChar, length, tokenTypeIndex, tokenModifiers ]

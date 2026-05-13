@@ -1,4 +1,6 @@
-package com.logolsp;
+package com.logolsp.parser;
+
+import com.logolsp.lexer.Token;
 
 import java.util.List;
 

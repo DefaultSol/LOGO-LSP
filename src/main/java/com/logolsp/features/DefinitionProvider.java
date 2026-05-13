@@ -1,5 +1,9 @@
-package com.logolsp;
+package com.logolsp.features;
 
+import com.logolsp.core.ParsedDocument;
+import com.logolsp.lexer.Token;
+import com.logolsp.lexer.TokenType;
+import com.logolsp.parser.AstNode;
 import org.eclipse.lsp4j.Location;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
@@ -29,7 +33,7 @@ public class DefinitionProvider {
 
             if (token.line == targetLine
                     && token.startChar <= targetChar
-                    && targetChar < token.startChar + token.length) {
+                    && targetChar <= token.startChar + token.length) {
                 return token;
             }
         }

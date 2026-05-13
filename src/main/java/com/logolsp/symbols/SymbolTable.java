@@ -1,4 +1,6 @@
-package com.logolsp;
+package com.logolsp.symbols;
+
+import com.logolsp.lexer.Token;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,8 +42,12 @@ public class SymbolTable {
     }
 
     public void declareVariable(Token nameToken, String currentProcedure) {
-        // Strip the quote
-        String varName = nameToken.text.substring(1).toLowerCase();
+        // Normalize variable token text
+        String text = nameToken.text;
+        if (!text.isEmpty() && (text.charAt(0) == '"' || text.charAt(0) == ':')) {
+            text = text.substring(1);
+        }
+        String varName = text.toLowerCase();
 
         if (currentProcedure != null) {
             localVariableDeclarations.put(

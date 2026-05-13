@@ -1,5 +1,10 @@
-package com.logolsp;
+package com.logolsp.lsp;
 
+import com.logolsp.core.DocumentStore;
+import com.logolsp.core.ParsedDocument;
+import com.logolsp.features.DefinitionProvider;
+import com.logolsp.features.DiagnosticAnalyzer;
+import com.logolsp.features.SemanticTokensProvider;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.TextDocumentService;

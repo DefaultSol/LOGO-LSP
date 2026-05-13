@@ -1,4 +1,4 @@
-package com.logolsp;
+package com.logolsp.lexer;
 
 // Design note: LOGO lists and other keywords are excluded intentionally, to limit the scope of LOGO for this task
 public enum TokenType {

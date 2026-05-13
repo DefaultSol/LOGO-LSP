@@ -1,5 +1,10 @@
-package com.logolsp;
+package com.logolsp.features;
 
+import com.logolsp.core.LogoBuiltIns;
+import com.logolsp.core.ParsedDocument;
+import com.logolsp.lexer.Token;
+import com.logolsp.parser.AstNode;
+import com.logolsp.parser.ParseError;
 import org.eclipse.lsp4j.Diagnostic;
 import org.eclipse.lsp4j.DiagnosticSeverity;
 import org.eclipse.lsp4j.Position;

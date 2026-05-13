@@ -1,4 +1,6 @@
-package com.logolsp;
+package com.logolsp.core;
+
+import com.logolsp.lexer.TokenType;
 
 import java.util.Map;
 

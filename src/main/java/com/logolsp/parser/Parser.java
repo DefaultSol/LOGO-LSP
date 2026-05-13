@@ -1,4 +1,8 @@
-package com.logolsp;
+package com.logolsp.parser;
+
+import com.logolsp.core.LogoBuiltIns;
+import com.logolsp.lexer.Token;
+import com.logolsp.lexer.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +14,7 @@ public class Parser {
     private final List<ParseError> errors = new ArrayList<>();
     private int current = 0;
 
-    Parser(List<Token> tokens) {
+    public Parser(List<Token> tokens) {
         this.tokens = tokens;
     }
 

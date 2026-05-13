@@ -1,4 +1,8 @@
-package com.logolsp;
+package com.logolsp.symbols;
+
+import com.logolsp.lexer.Token;
+import com.logolsp.lexer.TokenType;
+import com.logolsp.parser.AstNode;
 
 // Walks the AST, fills SymbolTable
 public class SymbolTableBuilder {

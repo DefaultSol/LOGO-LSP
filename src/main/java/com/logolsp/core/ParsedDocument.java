@@ -1,4 +1,9 @@
-package com.logolsp;
+package com.logolsp.core;
+
+import com.logolsp.symbols.SymbolTable;
+import com.logolsp.lexer.Token;
+import com.logolsp.parser.AstNode;
+import com.logolsp.parser.ParseError;
 
 import java.util.List;
 

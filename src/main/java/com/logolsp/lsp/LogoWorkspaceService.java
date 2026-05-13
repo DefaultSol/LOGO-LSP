@@ -1,4 +1,4 @@
-package com.logolsp;
+package com.logolsp.lsp;
 
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.DidChangeWatchedFilesParams;

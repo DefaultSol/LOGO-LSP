@@ -1,4 +1,4 @@
-package com.logolsp;
+package com.logolsp.lexer;
 
 public class Token {
 

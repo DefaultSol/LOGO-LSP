@@ -1,4 +1,4 @@
-package com.logolsp;
+package com.logolsp.parser;
 
 import java.util.List;
 

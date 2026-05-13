@@ -1,12 +1,9 @@
-package com.logolsp;
+package com.logolsp.lsp;
 
+import com.logolsp.features.SemanticTokensProvider;
 import org.eclipse.lsp4j.*;
-import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.services.*;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
@@ -18,17 +15,7 @@ public class LogoLanguageServer implements LanguageServer, LanguageClientAware {
 
     private static final Logger LOG = Logger.getLogger(LogoLanguageServer.class.getName());
 
-    public static void main(String[] args) {
-        InputStream systemIn = System.in;
-        OutputStream systemOut = System.out;
-        // redirect System.out to System.err because we need to prevent
-        // System.out from receiving anything that isn't an LSP message
-        System.setOut(new PrintStream(System.err));
-        LogoLanguageServer server = new LogoLanguageServer();
-        Launcher<LanguageClient> launcher = Launcher.createLauncher(server, LanguageClient.class, systemIn, systemOut);
-        server.connect(launcher.getRemoteProxy());
-        launcher.startListening();
-    }
+
 
     @Override
     public CompletableFuture<InitializeResult> initialize(InitializeParams params) {

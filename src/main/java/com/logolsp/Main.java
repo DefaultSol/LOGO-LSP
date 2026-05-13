@@ -1,5 +1,6 @@
 package com.logolsp;
 
+import com.logolsp.lsp.LogoLanguageServer;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
