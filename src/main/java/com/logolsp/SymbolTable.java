@@ -79,6 +79,58 @@ public class SymbolTable {
         return variableDeclarations.get(varName);
     }
 
+    public Map<String, List<Token>> getAllVariableReferences() {
+        return java.util.Collections.unmodifiableMap(variableReferences);
+    }
+
+    public List<Token> getUnusedProcedures() {
+        List<Token> unused = new ArrayList<>();
+        for (Map.Entry<String, Token> entry : procedureDeclarations.entrySet()) {
+            if (!procedureReferences.containsKey(entry.getKey())) {
+                unused.add(entry.getValue());
+            }
+        }
+        return unused;
+    }
+
+    public List<Token> getUndeclaredVariableReferences() {
+        List<Token> undeclared = new ArrayList<>();
+        for (Map.Entry<String, List<Token>> entry : variableReferences.entrySet()) {
+            String varName = entry.getKey();
+            boolean declaredGlobally = variableDeclarations.containsKey(varName);
+            boolean declaredLocally = localVariableDeclarations.keySet().stream().anyMatch(k -> k.endsWith("/" + varName));
+            if (!declaredGlobally && !declaredLocally) {
+                undeclared.addAll(entry.getValue());
+            }
+        }
+        return undeclared;
+    }
+
+    public List<Token> getProcedureReferences(String name) {
+        return procedureReferences.getOrDefault(name.toLowerCase(), List.of());
+    }
+
+    public List<Token> getVariableReferences(String name) {
+        return variableReferences.getOrDefault(name.toLowerCase(), List.of());
+    }
+
+    public Map<String, Token> getAllProcedureDeclarations() {
+        return java.util.Collections.unmodifiableMap(procedureDeclarations);
+    }
+
+    public Map<String, Token> getAllVariableDeclarations() {
+        return java.util.Collections.unmodifiableMap(variableDeclarations);
+    }
+
+    // -1: unknown
+    public int getProcedureParamCount(String name) {
+        return procedureParamCounts.getOrDefault(name.toLowerCase(), -1);
+    }
+
+    public List<Token> getProcedureParams(String name) {
+        return procedureParams.getOrDefault(name.toLowerCase(), List.of());
+    }
+
     // --- Util ---
 
     @Override
