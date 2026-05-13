@@ -84,16 +84,17 @@ public class Parser {
             if (statement != null) body.add(statement);
         }
 
+        AstNode.ProcedureDeclarationNode node = new AstNode.ProcedureDeclarationNode(nameToken, params, body);
+
         if (!check(TokenType.END)) {
             // Reached EOF without finding END
             errors.add(ParseError.at(peek(),
                     "Procedure '" + nameToken.text + "' is missing END"));
         } else {
-            advance();
+            Token endToken = advance();
+            node.endLine = endToken.line;
         }
 
-        AstNode.ProcedureDeclarationNode node =
-                new AstNode.ProcedureDeclarationNode(nameToken, params, body);
         node.setPosition(toToken);
         return node;
     }

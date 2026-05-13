@@ -11,6 +11,11 @@ import org.eclipse.lsp4j.SemanticTokens;
 import org.eclipse.lsp4j.SemanticTokensParams;
 import java.util.List;
 
+import org.eclipse.lsp4j.DefinitionParams;
+import org.eclipse.lsp4j.Location;
+import org.eclipse.lsp4j.LocationLink;
+import org.eclipse.lsp4j.jsonrpc.messages.Either;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
@@ -58,10 +63,10 @@ public class LogoTextDocumentService implements TextDocumentService {
         LOG.info("File saved: " + params.getTextDocument().getUri());
     }
 
-    // LSP feature handlers
+    // --- LSP feature handlers ---
+
     @Override
-    public CompletableFuture<SemanticTokens> semanticTokensFull(
-            SemanticTokensParams params) {
+    public CompletableFuture<SemanticTokens> semanticTokensFull(SemanticTokensParams params) {
 
         String uri = params.getTextDocument().getUri();
         ParsedDocument doc = documentStore.get(uri);
@@ -72,5 +77,24 @@ public class LogoTextDocumentService implements TextDocumentService {
 
         List<Integer> data = new SemanticTokensProvider().computeTokens(doc);
         return CompletableFuture.completedFuture(new SemanticTokens(data));
+    }
+
+    @Override
+    public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> definition(DefinitionParams params) {
+
+        String uri = params.getTextDocument().getUri();
+        ParsedDocument doc = documentStore.get(uri);
+
+        if (doc == null) {
+            return CompletableFuture.completedFuture(Either.forLeft(List.of()));
+        }
+
+        Location location = new DefinitionProvider().findDefinition(doc, params.getPosition());
+
+        if (location == null) {
+            return CompletableFuture.completedFuture(Either.forLeft(List.of()));
+        }
+
+        return CompletableFuture.completedFuture(Either.forLeft(List.of(location)));
     }
 }

@@ -50,6 +50,8 @@ public class LogoLanguageServer implements LanguageServer, LanguageClientAware {
 
         capabilities.setSemanticTokensProvider(semanticTokensOptions);
 
+        capabilities.setDefinitionProvider(true);
+
         InitializeResult result = new InitializeResult(capabilities);
         return CompletableFuture.completedFuture(result);
     }

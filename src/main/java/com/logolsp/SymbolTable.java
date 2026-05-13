@@ -61,6 +61,24 @@ public class SymbolTable {
         variableReferences.computeIfAbsent(varName, k -> new ArrayList<>()).add(varToken);
     }
 
+    // --- Lookup ---
+
+    public Token findProcedureDeclaration(String name) {
+        return procedureDeclarations.get(name.toLowerCase());
+    }
+
+    public Token findVariableDeclaration(String name, String currentProcedure) {
+        String varName = name.toLowerCase();
+
+        if (currentProcedure != null) {
+            Token local = localVariableDeclarations.get(currentProcedure.toLowerCase() + "/" + varName);
+            if (local != null)
+                return local;
+        }
+
+        return variableDeclarations.get(varName);
+    }
+
     // --- Util ---
 
     @Override

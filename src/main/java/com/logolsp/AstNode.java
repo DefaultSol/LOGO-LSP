@@ -70,6 +70,8 @@ public abstract class AstNode {
         public final Token nameToken;
         public final List<Token> paramTokens;
         public final List<AstNode> body;
+        public int endLine = -1;
+
         public ProcedureDeclarationNode(Token nameToken, List<Token> paramTokens, List<AstNode> body) {
             this.nameToken = nameToken;
             this.paramTokens = paramTokens;
