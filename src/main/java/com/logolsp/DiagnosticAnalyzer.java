@@ -54,7 +54,10 @@ public class DiagnosticAnalyzer {
         if (node == null)
             return;
 
-        if (node instanceof AstNode.ProcedureCallNode call) {
+        if (node instanceof AstNode.ProgramNode program) {
+            program.statements.forEach(s -> visitForUndefinedCalls(s, doc, out));
+
+        } else if (node instanceof AstNode.ProcedureCallNode call) {
             String name = call.nameToken.text;
             if (doc.symbolTable.findProcedureDeclaration(name) == null) {
                 out.add(makeDiagnostic(call.nameToken, "Undefined procedure: '" + name + "'", DiagnosticSeverity.Error));
@@ -119,7 +122,10 @@ public class DiagnosticAnalyzer {
         if (node == null)
             return;
 
-        if (node instanceof AstNode.ProcedureCallNode call) {
+        if (node instanceof AstNode.ProgramNode program) {
+            program.statements.forEach(s -> visitForWrongArgCounts(s, doc, out));
+
+        } else if (node instanceof AstNode.ProcedureCallNode call) {
             String name = call.nameToken.text;
             int expected = doc.symbolTable.getProcedureParamCount(name);
             int actual = call.arguments.size();
@@ -203,7 +209,10 @@ public class DiagnosticAnalyzer {
         if (node == null)
             return;
 
-        if (node instanceof AstNode.MakeNode make) {
+        if (node instanceof AstNode.ProgramNode program) {
+            program.statements.forEach(s -> visitForUnusedVariables(s, doc, out));
+
+        } else if (node instanceof AstNode.MakeNode make) {
             String varName = make.nameToken.text.substring(1);
             List<Token> refs = doc.symbolTable.getVariableReferences(varName);
             if (refs.isEmpty()) {

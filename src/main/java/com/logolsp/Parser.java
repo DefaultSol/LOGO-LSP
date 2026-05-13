@@ -213,7 +213,9 @@ public class Parser {
         List<AstNode> args = new ArrayList<>();
 
         // Parse arguments until new statement is started
-        while (isExpressionStart()) {
+        // Collect arguments only on the same line
+        int callLine = nameToken.line;
+        while (isExpressionStart() && peek().line == callLine) {
             args.add(parseExpression());
         }
 
