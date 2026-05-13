@@ -9,6 +9,7 @@ This project is a Language Server for the **LOGO** programming language, built i
 - Diagnostics: parser errors and selected semantic checks are reported to the client in real time
 
 
+
 ### Quick start
 
 Prerequisites:
@@ -58,7 +59,7 @@ You can connect any generic LSP client that supports launching a stdio server. B
 Example LOGO file to try: `src/main/java/com/logolsp/test.logo` (you can copy it into your workspace and edit).
 
 
-### Architecture and project layout
+## Architecture and project layout
 
 The design follows a small, layered structure:
 
@@ -91,15 +92,6 @@ The design follows a small, layered structure:
   - `SemanticTokensProvider` — classifies tokens and encodes semantic tokens for LSP
   - `DefinitionProvider` — maps variable/procedure uses to their declarations
   - `DiagnosticAnalyzer` — converts parse/semantic issues into LSP diagnostics
-
-
-### Building blocks and decisions
-
-- **Transport:** stdio via LSP4J (`LSPLauncher.createServerLauncher`) for broad client compatibility
-- **Single‑pass document pipeline:** tokenize → parse → symbols → snapshot; keeps feature code stateless and predictable
-- **Scope rules for variables:** procedure‑local first, then global, aligned with common LOGO dialect expectations
-- Token types are intentionally compact and mapped to client themes; the set can be extended easily
-
 
 ### Resources used
 
